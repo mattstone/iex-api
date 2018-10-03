@@ -29,16 +29,16 @@ module.exports = class iexAPI
     "#{@attribution()} View IED's <a href=\"https://iextrading.com/api-exhibit-a/\" _target=\"Blank\">Terms of Use\"</a>"
 
   # Stocks
-  symbols: (cb) => @iexRequest @iexURL("ref-data/symbols"), cb
+  symbols: (cb) -> @iexRequest @iexURL("ref-data/symbols"), cb
 
-  company:  (symbol, cb) => @iexRequest @iexURL("stock/#{symbol}/company"),  cb
+  company:  (symbol, cb) -> @iexRequest @iexURL("stock/#{symbol}/company"),  cb
   earnings: (symbol, cb) -> @iexRequest @iexURL("stock/#{symbol}/earnings"), cb
   stats:    (symbol, cb) -> @iexRequest @iexURL("stock/#{symbol}/stats"),    cb
   largestTrades: (symbol, cb) -> @iexRequest @iexURL("stock/#{symbol}/largest-trades"),    cb
   peers:    (symbol, cb) -> @iexRequest @iexURL("stock/#{symbol}/peers"),    cb
   relevant: (symbol, cb) -> @iexRequest @iexURL("stock/#{symbol}/relevant"), cb
 
-  chart:      (symbol, timeframe, cb) => @iexRequest @iexURL("stock/#{symbol}/chart/#{timeframe}"),     cb
+  chart:      (symbol, timeframe, cb) -> @iexRequest @iexURL("stock/#{symbol}/chart/#{timeframe}"),     cb
   financials: (symbol, timeframe, cb) -> @iexRequest @iexURL("stock/#{symbol}/financials?period=#{timeframe}"), cb
   dividends:  (symbol, timeframe, cb) -> @iexRequest @iexURL("stock/#{symbol}/dividends/#{timeframe}"), cb
 
@@ -48,3 +48,7 @@ module.exports = class iexAPI
   # News
   newsMarket: (cb)         -> @iexRequest @iexURL("stock/market/news/last.25"), cb
   newsStock:  (symbol, cb) -> @iexRequest @iexURL("stock/#{symbol}/news"),      cb
+
+  #Batch
+  batchSingleSymbol: (symbol,  types, timeframe, cb) -> @iexRequest @iexURL("stock/#{symbol}/batch?types=#{types}&range=#{timeframe}"), cb
+  batchMultiSymbol:  (symbols, types, timeframe, cb) -> @iexRequest @iexURL("stock/market/batch?symbols=#{symbols}&types=#{types}&range=#{timeframe}"), cb

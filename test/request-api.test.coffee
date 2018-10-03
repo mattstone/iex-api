@@ -7,6 +7,9 @@ iex       = new IexAPI
 symbol    = "AAPL"
 timeframe = "5y"
 
+multipleSymbols = "AAPL,FB,TSLA,CSCO"
+batchTypes      = "quote,news,chart"
+
 describe 'IexAPI', ->
 
   it 'should have version', (done) ->
@@ -272,6 +275,8 @@ describe 'IexAPI', ->
         body.data.should.be.an 'array'
 
         for element in body.data
+          console.log util.inspect element
+
           element.symbol.should.exist
           element.companyName.should.exist
           element.primaryExchange.should.exist
@@ -353,4 +358,44 @@ describe 'IexAPI', ->
           element.related.should.exist
           element.related.should.contain symbol
           element.image.should.exist
+        done()
+
+  describe 'Batch requests', ->
+
+    it "should get quote, news and chart data for symbol: #{symbol}", (done) ->
+      iex.batchSingleSymbol symbol, "quote,news,chart", timeframe, (err, body) ->
+        should.not.exist err
+        body.should.be.an 'object'
+        body.status.should.equal 200
+        body.data.should.be.an 'object'
+        body.data.quote.should.exist
+        body.data.news.should.exist
+        body.data.chart.should.exist
+        done()
+
+
+    it "should get #{batchTypes} data for multiple symbols: #{multipleSymbols}", (done) ->
+
+      iex.batchMultiSymbol multipleSymbols, batchTypes, timeframe, (err, body) ->
+        should.not.exist err
+        body.should.be.an 'object'
+        body.status.should.equal 200
+        body.data.should.be.an 'object'
+
+        body.data.AAPL.should.be.an       'object'
+        body.data.AAPL.quote.should.be.an 'object'
+        body.data.AAPL.news.should.be.an  'array'
+        body.data.AAPL.chart.should.be.an 'array'
+        body.data.FB.should.be.an         'object'
+        body.data.FB.quote.should.be.an   'object'
+        body.data.FB.news.should.be.an    'array'
+        body.data.FB.chart.should.be.an   'array'
+        body.data.TSLA.should.be.an       'object'
+        body.data.TSLA.quote.should.be.an 'object'
+        body.data.TSLA.news.should.be.an  'array'
+        body.data.TSLA.chart.should.be.an 'array'
+        body.data.CSCO.should.be.an       'object'
+        body.data.CSCO.quote.should.be.an 'object'
+        body.data.CSCO.news.should.be.an  'array'
+        body.data.CSCO.chart.should.be.an 'array'
         done()
