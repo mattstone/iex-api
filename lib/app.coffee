@@ -1,11 +1,10 @@
 request       = require 'superagent'
 io            = require 'socket.io-client'
-io            = require 'socket.io-client'
 async         = require 'async'
 util          = require 'util'
 h             = require './helpers'
 
-axios         = require('axios')
+axios         = require 'axios'
 
 module.exports = class iexAPI
 
@@ -46,7 +45,7 @@ module.exports = class iexAPI
   crypto: (cb)     -> @iexRequest @iexURL("stock/market/crypto"),       cb
 
   # News
-  newsMarket: (cb)         -> @iexRequest @iexURL("stock/market/news/last.25"), cb
+  newsMarket: (cb)         -> @iexRequest @iexURL("stock/market/news/last/25"), cb
   newsStock:  (symbol, cb) -> @iexRequest @iexURL("stock/#{symbol}/news"),      cb
 
   #Batch
