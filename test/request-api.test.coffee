@@ -10,6 +10,9 @@ timeframe = "5y"
 multipleSymbols = "AAPL,FB,TSLA,CSCO"
 batchTypes      = "quote,news,chart"
 
+debug = (data) ->
+  console.log util.inspect data
+
 describe 'IexAPI', ->
 
   it 'should have version', (done) ->
@@ -67,6 +70,7 @@ describe 'IexAPI', ->
     it "should get #{symbol} earnings info", (done) ->
       iex.earnings symbol, (err, body) ->
         should.not.exist err
+
         body.should.be.an 'object'
         body.status.should.equal 200
         body.data.should.be.an 'object'
@@ -90,6 +94,7 @@ describe 'IexAPI', ->
 
     it "should get #{symbol} stats info", (done) ->
       iex.stats symbol, (err, body) ->
+
         should.not.exist err
         body.should.be.an 'object'
         body.status.should.equal 200
@@ -133,7 +138,7 @@ describe 'IexAPI', ->
         body.data.day200MovingAvg.should.exist
         body.data.day50MovingAvg.should.exist
         #body.data.insiderPercent.should.exist
-        body.data.shortRatio.should.exist
+        # body.data.shortRatio.should.exist
         body.data.year5ChangePercent.should.exist
         body.data.year2ChangePercent.should.exist
         body.data.year1ChangePercent.should.exist
@@ -214,7 +219,6 @@ describe 'IexAPI', ->
           element.changeOverTime.should.exist
         done()
 
-
     it "should get #{symbol} financials info for timeframe: #{timeframe}", (done) ->
       iex.financials symbol, timeframe, (err, body) ->
         should.not.exist err
@@ -275,52 +279,53 @@ describe 'IexAPI', ->
         body.data.should.be.an 'array'
 
         for element in body.data
-          console.log util.inspect element
-
           element.symbol.should.exist
-          element.companyName.should.exist
-          element.primaryExchange.should.exist
-          element.sector.should.exist
-          element.calculationPrice.should.exist
-          element.open.should.exist
-          element.openTime.should.exist
-          element.close.should.exist
-          element.closeTime.should.exist
-          element.high.should.exist
-          element.low.should.exist
-          element.latestPrice.should.exist
-          element.latestSource.should.exist
-          element.latestTime.should.exist
-          element.latestUpdate.should.exist
-          element.latestVolume.should.exist
-          #element.iexRealtimePrice.should.exist
-          #element.iexRealtimeSize.should.exist
-          # element.iexLastUpdated.should.exist
-          # element.delayedPrice.should.exist
-          # element.delayedPriceTime.should.exist
-          # element.extendedPrice.should.exist
-          # element.extendedChange.should.exist
-          # element.extendedChangePercent.should.exist
-          # element.extendedPriceTime.should.exist
-          element.previousClose.should.exist
-          element.change.should.exist
-          element.changePercent.should.exist
-          #element.iexMarketPercent.should.exist
-          # element.iexVolume.should.exist
-          # element.avgTotalVolume.should.exist
-          # element.iexBidPrice.should.exist
-          # element.iexBidSize.should.exist
-          # element.iexAskPrice.should.exist
-          # element.iexAskSize.should.exist
-          # element.marketCap.should.exist
-          # element.peRatio.should.exist
-          # element.week52High.should.exist
-          # element.week52Low.should.exist
-          # element.ytdChange.should.exist
-          # element.bidPrice.should.exist
-          # element.bidSize.should.exist
-          # element.askPrice.should.exist
-          # element.askSize.should.exist
+
+          # only BTSUSD is stable
+          if element.symbol is "BTCUSDT"
+            element.companyName.should.exist
+            element.primaryExchange.should.exist
+            element.sector.should.exist
+            element.calculationPrice.should.exist
+            element.open.should.exist
+            element.openTime.should.exist
+            element.close.should.exist
+            element.closeTime.should.exist
+            element.high.should.exist
+            element.low.should.exist
+            element.latestPrice.should.exist
+            element.latestSource.should.exist
+            element.latestTime.should.exist
+            element.latestUpdate.should.exist
+            element.latestVolume.should.exist
+            #element.iexRealtimePrice.should.exist
+            #element.iexRealtimeSize.should.exist
+            # element.iexLastUpdated.should.exist
+            # element.delayedPrice.should.exist
+            # element.delayedPriceTime.should.exist
+            # element.extendedPrice.should.exist
+            # element.extendedChange.should.exist
+            # element.extendedChangePercent.should.exist
+            # element.extendedPriceTime.should.exist
+            element.previousClose.should.exist
+            element.change.should.exist
+            element.changePercent.should.exist
+            #element.iexMarketPercent.should.exist
+            # element.iexVolume.should.exist
+            # element.avgTotalVolume.should.exist
+            # element.iexBidPrice.should.exist
+            # element.iexBidSize.should.exist
+            # element.iexAskPrice.should.exist
+            # element.iexAskSize.should.exist
+            # element.marketCap.should.exist
+            # element.peRatio.should.exist
+            # element.week52High.should.exist
+            # element.week52Low.should.exist
+            # element.ytdChange.should.exist
+            # element.bidPrice.should.exist
+            # element.bidSize.should.exist
+            # element.askPrice.should.exist
+            # element.askSize.should.exist
         done()
 
   describe 'News', ->
@@ -372,7 +377,6 @@ describe 'IexAPI', ->
         body.data.news.should.exist
         body.data.chart.should.exist
         done()
-
 
     it "should get #{batchTypes} data for multiple symbols: #{multipleSymbols}", (done) ->
 
